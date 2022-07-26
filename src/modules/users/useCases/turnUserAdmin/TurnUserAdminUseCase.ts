@@ -1,16 +1,24 @@
-import { User } from "../../model/User";
-import { IUsersRepository } from "../../repositories/IUsersRepository";
+import { User } from '../../model/User'
+import { IUsersRepository } from '../../repositories/IUsersRepository'
 
 interface IRequest {
-  user_id: string;
+    user_id: string
 }
 
 class TurnUserAdminUseCase {
-  constructor(private usersRepository: IUsersRepository) {}
+    constructor(private usersRepository: IUsersRepository) {}
 
-  execute({ user_id }: IRequest): User {
-    // Complete aqui
-  }
+    execute({ user_id }: IRequest): User {
+        const userAdmin = this.usersRepository.findById(user_id)
+
+        if (!userAdmin) {
+            throw new Error('User not found!')
+        }
+
+        const turnUser = this.usersRepository.turnAdmin(userAdmin)
+
+        return turnUser
+    }
 }
 
-export { TurnUserAdminUseCase };
+export { TurnUserAdminUseCase }
